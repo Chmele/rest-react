@@ -25,6 +25,20 @@ class Place(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
     type = models.ForeignKey('Placetype', models.CASCADE)
 
+    def no_of_ratings(self):
+        ratings = Comment.objects.filter(place = self)
+        return len(ratings)
+
+    def avg_rating(self):
+        sum = 0
+        ratings = Comment.objects.filter(place = self)
+        for r in ratings:
+            sum += r.mark
+            return sum/self.no_of_ratings()
+
+    def typename(self):
+        return self.type.typename
+
     class Meta:
         managed = False
         db_table = 'main_place'

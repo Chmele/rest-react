@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        fields = ('id', 'name', 'type')
+        fields = ('id', 'type', 'name', 'typename', 'no_of_ratings', 'avg_rating')
 
 
 class PlacetypeSerializer(serializers.ModelSerializer):

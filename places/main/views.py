@@ -22,6 +22,12 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
 
+class PlaceTypeViewSet(viewsets.ModelViewSet):
+    queryset = Placetype.objects.all()
+    serializer_class = PlacetypeSerializer
+    permission_classes = (AllowAny,)
+
+
 class PlaceViewSet(viewsets.ModelViewSet):
     queryset = Place.objects.all()
     serializer_class = PlaceSerializer
@@ -34,20 +40,23 @@ class PlaceViewSet(viewsets.ModelViewSet):
 
             place = Place.objects.get(id=pk)
             mark = request.data['mark']
-            text = request.data['text']
+            if 'text'in request.data:
+                text = request.data['text']
+            else:
+                text = ''
             user = request.user
 
             try:
-                comment = Comment.objects.get(user=user.id, place=Place.id)
+                comment = Comment.objects.get(author=user.id, place=place.id)
                 comment.mark = mark
                 comment.text = text
                 comment.save()
-                serializer = RatingSerializer(comment, many=False)
+                serializer = CommentSerializer(comment, many=False)
                 response = {'message': 'Comment updated', 'result': serializer.data}
                 return Response(response, status=status.HTTP_200_OK)
             except:
-                comment = Comment.objects.create(user=user, place=Place, mark=mark, text=text)
-                serializer = RatingSerializer(comment, many=False)
+                comment = Comment.objects.create(author=user, place=place, mark=mark, text=text)
+                serializer = CommentSerializer(comment, many=False)
                 response = {'message': 'Comment created', 'result': serializer.data}
                 return Response(response, status=status.HTTP_200_OK)
 

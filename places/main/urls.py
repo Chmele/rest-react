@@ -7,6 +7,7 @@ router = routers.DefaultRouter()
 router.register('users', UserViewSet)
 router.register('places', PlaceViewSet)
 router.register('comments', CommentViewSet)
+router.register('place_types', PlaceTypeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
