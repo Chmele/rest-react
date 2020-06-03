@@ -1,4 +1,4 @@
-#!/var/www/html/IIcourse/django_rest_lab/env/bin/python3
+#!/var/www/Lab/rest-react/env/bin/python3.6
 from django.core import management
 
 if __name__ == "__main__":

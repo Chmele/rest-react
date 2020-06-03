@@ -12,7 +12,7 @@ function PlaceList(props) {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'Token d020cf4b9d015624a50e719e2732efa520ebf6b5'
+                'Authorization':`Token d020cf4b9d015624a50e719e2732efa520ebf6b5`
             }
             }).then( resp => props.placeDeleted(place))
             .catch(error => console.log(error));

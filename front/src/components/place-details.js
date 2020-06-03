@@ -16,7 +16,7 @@ class PlaceDetails extends Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'Token d020cf4b9d015624a50e719e2732efa520ebf6b5'
+                'Authorization':`Token ${this.props.token}`
             },
             body: JSON.stringify({mark:stars+1, text:''})
             }).then( resp => resp.json())
@@ -29,7 +29,7 @@ class PlaceDetails extends Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'Token d020cf4b9d015624a50e719e2732efa520ebf6b5'
+                'Authorization':`Token ${this.props.token}`
             }
             }).then( resp => resp.json())
             .then(res => this.props.updateRating(res))

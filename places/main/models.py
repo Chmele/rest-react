@@ -34,7 +34,10 @@ class Place(models.Model):
         ratings = Comment.objects.filter(place = self)
         for r in ratings:
             sum += r.mark
-            return sum/self.no_of_ratings()
+            #print(r.mark)
+        if self.no_of_ratings() == 0:
+            return 0;
+        return sum/self.no_of_ratings()
 
     def typename(self):
         return self.type.typename

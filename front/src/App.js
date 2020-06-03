@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import PlaceList from './components/place-list'
-import PlaceDetails from './components/place-details'
-import PlaceForm from './components/place-form'
+import PlaceList from './components/place-list';
+import PlaceDetails from './components/place-details';
+import PlaceForm from './components/place-form';
+import { withCookies } from 'react-cookie';
+
+
 var FontAwesome = require('react-fontawesome')
 
 class App extends Component{
@@ -11,26 +14,34 @@ class App extends Component{
     places: [],
     placetypes: [],
     selectedPlace: null,
-    editedPlace: null
+    editedPlace: null,
+    token: this.props.cookies.get('pl-token')
   }
 
   componentDidMount(){
-    fetch('http://192.168.1.80:8000/main/places', {
-      method: 'GET',
-      headers: {
-        'Authorization':'Token d020cf4b9d015624a50e719e2732efa520ebf6b5'
-      }
-    }).then( resp => resp.json())
-    .then(res => this.setState({places:res}))
-    .catch(error => console.log(error));
-    fetch('http://192.168.1.80:8000/main/place_types', {
-      method: 'GET',
-      headers: {
-        'Authorization':'Token d020cf4b9d015624a50e719e2732efa520ebf6b5'
-      }
-    }).then( resp => resp.json())
-    .then(res => this.setState({placetypes:res}))
-    .catch(error => console.log(error));
+    console.log(this.state.token);
+    if(this.state.token){
+      fetch(`${process.env.REACT_APP_API_URL}/main/places`, {
+        method: 'GET',
+        headers: {
+          'Authorization':`Token ${this.state.token}`
+        }
+      }).then( resp => resp.json())
+      .then(res => this.setState({places:res}))
+      .catch(error => console.log(error));
+      fetch(`${process.env.REACT_APP_API_URL}/main/place_types`, {
+        method: 'GET',
+        headers: {
+          'Authorization':`Token ${this.state.token}`
+        }
+      }).then( resp => resp.json())
+      .then(res => this.setState({placetypes:res}))
+      .catch(error => console.log(error));
+    }
+    else{
+      window.location.href = '/'
+    }
+    
   }
 
   placeClicked = place => {
@@ -70,15 +81,22 @@ class App extends Component{
               placeClicked={this.placeClicked}
               placeDeleted={this.placeDeleted} 
               editPlace={this.editPlace}
-              newPlace={this.newPlace}/>
+              newPlace={this.newPlace}
+              token={this.state.token}
+              />
               <div>
                 {!this.state.editedPlace ? 
-                  <PlaceDetails place={this.state.selectedPlace} updateRating={this.placeClicked}/>
+                  <PlaceDetails place={this.state.selectedPlace} 
+                  updateRating={this.placeClicked}
+                  token={this.state.token}
+                  />
                  : <PlaceForm place={this.state.editedPlace}
               cancelForm={this.cancelForm}
               placetypes={this.state.placetypes}
               newPlace={this.addPlace}
-              editedPlace={this.placeClicked}/>
+              editedPlace={this.placeClicked}
+              token={this.state.token}
+              />
               }
               </div>
             
@@ -88,4 +106,4 @@ class App extends Component{
   }
 }
 
-export default App;
+export default withCookies(App);

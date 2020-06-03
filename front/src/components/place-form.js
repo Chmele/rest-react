@@ -12,6 +12,7 @@ class PlaceForm extends Component {
     inputChanged = event => {
         console.log('changed');
         let place = this.state.editedPlace;
+        place.type == null ? place.type = 1 : console.log();
         place[event.target.name] = event.target.value;
         this.setState({editedPlace: place});
         console.log(this.editedPlace);
@@ -22,7 +23,7 @@ class PlaceForm extends Component {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'Token d020cf4b9d015624a50e719e2732efa520ebf6b5'
+                'Authorization':`Token ${this.props.token}`
             },
             body: JSON.stringify(this.state.editedPlace)
             }).then( resp => resp.json())
@@ -35,7 +36,7 @@ class PlaceForm extends Component {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization':'Token d020cf4b9d015624a50e719e2732efa520ebf6b5'
+                'Authorization':`Token ${this.props.token}`
             },
             body: JSON.stringify(this.state.editedPlace)
             }).then( resp => resp.json())
@@ -47,13 +48,15 @@ class PlaceForm extends Component {
 
         const isDisabled = this.state.editedPlace.name.length == 0;
 
+        this.state.editedPlace.type = this.state.editedPlace.type || 1;
+
         return (
             <React.Fragment>
                 <span>Назва</span><br/>
                 <input type="text" name="name" value={this.props.place.name} 
                     onChange={this.inputChanged}/><br/>
                 <span>Тип</span><br/>
-                <select name="type" value={this.props.place.type} onChange={this.inputChanged}>
+                <select name="type" value={this.props.place.type || 1} onChange={this.inputChanged}>
                     {
                     this.props.placetypes.map(function(item){
                         return(
